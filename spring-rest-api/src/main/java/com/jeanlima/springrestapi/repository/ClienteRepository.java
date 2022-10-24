@@ -1,16 +1,19 @@
 package com.jeanlima.springrestapi.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.jeanlima.springrestapi.model.Cliente;
 
 //classe e tipo do id
 //start jpa já escaneia interfaces que herdam o JpaRepository - não precisa da anotaçao
+@Repository
 public interface ClienteRepository extends JpaRepository<Cliente,Integer>{
 
     /*
@@ -25,7 +28,9 @@ public interface ClienteRepository extends JpaRepository<Cliente,Integer>{
     List<Cliente> findByNomeLike(String nome);
     List<Cliente> findByNomeOrId(String nome, Integer id);
     boolean existsByNome(String nome);
-
+    
+    @Query(" select p from Cliente p left join fetch p.pedidos where p.id = :id ")
+    Optional<Cliente> findByIdFetchPedidos(@Param("id") Integer id);
     /*
      * Trabalhando com @Query
      */
